@@ -2,6 +2,10 @@ import psycopg2
 import config
 
 def db_connect():
+    """
+     Соединяется с базой данных
+    :return: соединение
+    """
     try:
         connection = psycopg2.connect(host=config.host, user=config.user, password=config.password, database=config.db_name)
         connection.autocommit = True
@@ -10,7 +14,13 @@ def db_connect():
         print(ex)
         return False
 
-def request(connection, command):
+def request(connection, command) -> None:
+    """
+    Отправляет SQL команды в базу данных
+    :param Соединение:
+    :param SQL команды:
+    :return:
+    """
     try:
         with connection.cursor() as cursor:
             cursor.execute(command)
@@ -21,14 +31,18 @@ def request(connection, command):
         if connection:
             connection.close()
 
-def print_rez(rez):
+def print_rez(rez) -> None:
+    """
+     Выводит таблицу
+    :param rez:Данные из базы
+    """
     if type(rez) == list:
         for r in rez:
             print(r)
     else:
         print(rez)
 
-def main():
+def main() -> None:
     print("""
     Введите номер команды если хотите 
     1.Вывести все объявления
