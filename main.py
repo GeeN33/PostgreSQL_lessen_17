@@ -1,5 +1,6 @@
 import psycopg2
-import config
+import os
+from dotenv import load_dotenv, find_dotenv
 
 def db_connect():
     """
@@ -7,7 +8,8 @@ def db_connect():
     :return: соединение
     """
     try:
-        connection = psycopg2.connect(host=config.host, user=config.user, password=config.password, database=config.db_name)
+        load_dotenv(find_dotenv())
+        connection = psycopg2.connect(host= os.getenv('host'), user=os.getenv('user'), password=os.getenv('password'), database=os.getenv('db_name'))
         connection.autocommit = True
         return connection
     except Exception as ex:
