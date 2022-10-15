@@ -39,8 +39,11 @@ def print_rez(rez) -> None:
     :param rez:Данные из базы
     """
     if type(rez) == list:
-        for r in rez:
-            print(r)
+        if len(rez) > 0:
+            for r in rez:
+                print(r)
+        else:
+            print('Ничего не найдено')
     else:
         print(rez)
 
@@ -70,14 +73,20 @@ def main() -> None:
         print_rez(rez)
     if number == '2':
         user = input('>>')
-        #user = 'Павел,Петр'
-        users = tuple(user.split(','))
+        user_lest = user.split(',')
+        in_ = 'IN'
+        if len(user_lest) > 1:
+           user = tuple(user.split(','))
+        else:
+            user = "'"+user+"'"
+            in_ = '='
+        print(user)
         command = f"""
                     SELECT ads.id, ads.name, ads_author.author, price, description, ads_address.address, is_published
                     FROM ads
                     JOIN ads_address ON ads_address.id = ads.fk_address
                     JOIN ads_author ON ads_author.id = ads.fk_author
-                    WHERE ads_author.author IN {users}                 
+                    WHERE ads_author.author {in_} {user}                 
                   """
         rez = request(connection, command)
         print_rez(rez)
